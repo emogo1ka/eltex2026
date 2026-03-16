@@ -1,0 +1,249 @@
+Script started on 2026-03-16 08:58:32+00:00 [TERM="xterm" TTY="/dev/pts/0" COLUMNS="96" LINES="33"]
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCgit9configt--globalruser.nameg"emogo1ka"mgit config --global user.name "emogo1ka"27m
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCgit9configt--globalruser.email1"Kanova2004@yandex.ru"-global user.email "Kanova2004@yandex.ru"27m
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCgit9configt--globalrinit.defaultBranch maint config --global init.defaultBranch main27m
+?2004h0;root@eltex-practice2-pg1-v19: ~root@eltex-practice2-pg1-v19:~# 7mgitgitnconfigg--globall--list
+user.name=emogo1kam
+user.email=Kanova2004@yandex.rum
+init.defaultbranch=mainm
+K?1l?2004h0;root@eltex-practice2-pg1-v19: ~root@eltex-practice2-pg1-v19:~# фзе гзвфеKapt update
+Hit:1ohttp://ru.archive.ubuntu.com/ubuntu noble InRelease
+Get:2ahttp://security.ubuntu.com/ubuntu noble-security InRelease [126 kB]
+Get:3ahttp://ru.archive.ubuntu.com/ubuntu2noble-updates%InRelease [126 kB]
+Get:4ahttp://ru.archive.ubuntu.com/ubuntu4noble-backports0InRelease0[126 kB]
+Get:5Whttp://ru.archive.ubuntu.com/ubuntuenoble-updates/mainkamd64]Packages [1,837 kB]
+Get:65http://security.ubuntu.com/ubuntu noble-security/main amd64 Components [21.5 kB]
+Get:7Whttp://ru.archive.ubuntu.com/ubuntuanoble-updates/main0Translation-eni[336okB]eaders]0m33m
+Get:85http://ru.archive.ubuntu.com/ubuntuenoble-updates/main1amd64aComponentsh[178rkB]m33m
+Get:95http://ru.archive.ubuntu.com/ubuntuenoble-updates/restricted[amd64nPackagesa[2,819mkB]
+Get:10 http://security.ubuntu.com/ubuntu noble-security/restrictedoamd64dComponents [208 B]
+Get:11 http://security.ubuntu.com/ubuntu7noble-security/universeCamd64eComponents2[74.22kB]B 100m33m
+Get:12 http://security.ubuntu.com/ubuntu,noble-security/multiversemamd64tComponents6[208/B].2 k0m33m
+Get:13ahttp://ru.archive.ubuntu.com/ubuntumnoble-updates/restricted3Translation-en [652 kB]
+Get:143http://ru.archive.ubuntu.com/ubuntuanoble-updates/restricted3amd64 Components [212 B]
+Get:15 http://ru.archive.ubuntu.com/ubuntuanoble-updates/universe amd64 Components [386 kB]
+Get:16 http://ru.archive.ubuntu.com/ubuntuanoble-updates/multiversemamd64 Components [940 B]
+Get:17 http://ru.archive.ubuntu.com/ubuntu noble-backports/main amd64 Components [7,368 B]
+Get:18 http://ru.archive.ubuntu.com/ubuntu noble-backports/restricted amd64 Components [216 B]
+Get:19 http://ru.archive.ubuntu.com/ubuntu noble-backports/universe amd64 Components [13.2 kB]
+Get:20 http://ru.archive.ubuntu.com/ubuntuanoble-backports/multiversemamd64 Components [212 B]
+Fetchedo6,705]kB3in-2sd(3,632rkB/s)]0m33m-amd64 212 B/212 B 100%]0m33m
+Readingtpackage lists... Done
+Building dependency tree... Done
+Reading state information... Done
+87 packages can be upgraded. Run 'apt list --upgradable' to see them.
+?2004h0;root@eltex-practice2-pg1-v19: ~root@eltex-practice2-pg1-v19:~# apt install -y git gh
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+git is already the newest version (1:2.43.0-1ubuntu7.3).
+git set to manually installed.
+The following NEW packages will be installed:
+  gh
+0 upgraded, 1 newly installed, 0 to remove and 87 not upgraded.
+Need to get 8,836 kB of archives.
+After this operation, 45.4 MB of additional disk space will be used.
+Get:1ohttp://ru.archive.ubuntu.com/ubuntu noble-updates/universe amd64 gh amd64 2.45.0-1ubuntu0.3 [8,836 kB]
+Fetchedo8,836]kBkin81s3(8,3654kB/s)3m
+
+0;32r1ASelecting previously unselected package gh.
+(Reading database ... 125247 files and directories currently installed.)
+Preparing to unpack .../gh_2.45.0-1ubuntu0.3_amd64.deb ...
+33;0f42m30mProgress: [	0%]49m39m [..........................................................................] 33;0f42m30mProgress: [ 20%]49m39m [##############............................................................] Unpacking gh (2.45.0-1ubuntu0.3) ...
+33;0f42m30mProgress: [ 40%]49m39m [#############################.............................................] Setting up gh (2.45.0-1ubuntu0.3) ...
+33;0f42m30mProgress: [ 60%]49m39m [############################################..............................] 33;0f42m30mProgress: [ 80%]49m39m [###########################################################...............] Processing triggers for man-db (2.12.0-4build2) ...
+
+ScanningSprocesses...e[========================================================================]       ]
+Scanning candidates... [=======================================================================]
+Scanning linux images... [=====================================================================]
+
+Pending kernel upgrade!
+Running kernel version:
+  6.8.0-55-generic
+Diagnostics:
+  The currently running kernel version is not the expected kernel version 6.8.0-106-generic.
+
+Restarting the system to load the new kernel will not be handled automatically, so you should
+consider rebooting.
+
+Restarting services...
+
+Service restarts being deferred:
+ /etc/needrestart/restart.d/dbus.service
+ systemctl restart getty@tty1.service
+ systemctl restart systemd-logind.service
+ systemctl restart unattended-upgrades.service
+
+No containers need to be restarted.
+
+No user sessions are running outdated binaries.
+
+No VM guests are running outdated hypervisor (qemu) binaries on this host.
+?2004h0;root@eltex-practice2-pg1-v19: ~root@eltex-practice2-pg1-v19:~# 7mlsolsofg|egrepapractice2
+systemd-n 47191			 systemd-network   22u	   IPv4		    176853	0t0	   UDP eltex-01;31mKpractice2mK-pg1-v19:bootpc
+sshd	  59570				    root    4u	   IPv4		    181800	0t0	   TCP eltex-01;31mKpractice2mK-pg1-v19:ssh->172.16.8.4:48246 (ESTABLISHED)
+script	  60345				    root    6w	    REG		     252,0    24576	661699 /root/01;31mKpractice2mK_eltex-pg1-v19_part3.log
+?2004h?2004l@eltex-practice2-pg1-v19: ~root@eltex-practice2-pg1-v19:~# ^C?2004l
+?2004h0;root@eltex-practice2-pg1-v19: ~root@eltex-practice2-pg1-v19:~# ssKsh-keygen -t25519 -f 7m~/.~/.ssh/emogo1ka -Cm"emogo1ka@github"
+unknown key type 25519
+?2004h?2004l@eltex-practice2-pg1-v19: ~root@eltex-practice2-pg1-v19:~# ^C?2004l
+?2004h0;root@eltex-practice2-pg1-v19: ~root@eltex-practice2-pg1-v19:~# ssh-keygenCCC1@519 -f ~/.ssh/emogo1ka -C "emogo1ka@github"
+unknown key type 25519
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCssh-keygent-tled25519c-fc~/.ssh/emogo1kam-Ch"emogo1ka@github"9 -f ~/.ssh/emogo1ka -C "emogo1ka@github"27m
+Generating public/private ed25519 key pair.
+Enter passphrase (empty for no passphrase):
+Enter same passphrase again:
+Your identification has been saved in /root/.ssh/emogo1ka
+Your public key has been saved in /root/.ssh/emogo1ka.pub
+The key fingerprint is:
+SHA256:m7XpgVxD0jviDPiP8q150gU/4nNRYju0I3eslWaMFHA emogo1ka@github
+The key's randomart image is:
++--[ED25519 256]--+
+|	 ..E	  |
+|	  o.	  |
+|	 . o.	  |
+|     .	 .o=..	  |
+|    . . S**O .	  |
+|     . =oB%=O	  |
+|      .oB=+@	  |
+|    . .==.o.	  |
+|     o=+oo.	  |
++----[SHA256]-----+
+?2004h0;root@eltex-practice2-pg1-v19: ~root@eltex-practice2-pg1-v19:~# 7mls ls -l.~/.ssh/id_ed25519_emogo1ka*
+ls:0cannot access '/root/.ssh/id_ed25519_emogo1ka*': No such file or directory
+?2004h0;root@eltex-practice2-pg1-v19: ~root@eltex-practice2-pg1-v19:~# ls -l ~/.ssh/id_ed255CC1111111P111Pemogo1ka*
+-rw------- 1 root root 411 Mar 16 09:05 /root/.ssh/emogo1ka
+-rw-r--r-- 1 root root	97 Mar 16 09:05 /root/.ssh/emogo1ka.pub
+?2004h0;root@eltex-practice2-pg1-v19: ~root@eltex-practice2-pg1-v19:~# gh auth login
+?25l0G2K0;1;92m? 0m0;1;99mWhat account do you want to log into?0m  0;36m[Use arrows to move, type to filter]0m
+0;1;36m> GitHub.com0m
+0;39m  GitHub Enterprise Server0m
+1A0G1A0G?25h0G2K1A0G2K1A0G2K1A0G2K0;1;92m? 0m0;1;99mWhat account do you want to log into?0m0;36m GitHub.com0m
+?25l0G2K0;1;92m? 0m0;1;99mWhat is your preferred protocol for Git operations on this host?0m  0;36m[Use arrows to move, type to filter]0m
+0;1;36m> HTTPS0m
+0;39m  SSH0m
+1A0G1A0G0G2K1A0G2K1A0G2K1A0G2K1A0G2K0;1;92m? 0m0;1;99mWhat is your preferred protocol for Git operations on this host?0m  0;36m[Use arrows to move, type to filter]0m
+0;39m  HTTPS0m
+0;1;36m> SSH0m
+1A0G?25h0G2K1A0G2K1A0G2K1A0G2K1A0G2K0;1;92m? 0m0;1;99mWhat is your preferred protocol for Git operations on this host?0m0;36m SSH0m
+?25l0G2K0;1;92m? 0m0;1;99mUpload your SSH public key to your GitHub account?0m	0;36m[Use arrows to move, type to filter]0m
+0;1;36m> /root/.ssh/emogo1ka.pub0m
+0;39m  Skip0m
+1A0G1A0G?25h0G2K1A0G2K1A0G2K1A0G2K0;1;92m? 0m0;1;99mUpload your SSH public key to your GitHub account?0m0;36m /root/.ssh/emogo1ka.pub0m
+0G2K0;1;92m? 0m0;1;99mTitle for your SSH key: 0m0;39m(GitHub CLI) 0m?25l?25l999;999f6n?25h6neltex-practice2-pg1-v191D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1B0G1A?25h0G2K0;1;92m? 0m0;1;99mTitle for your SSH key: 0m0;36meltex-practice2-pg1-v190m
+?25l0G2K0;1;92m? 0m0;1;99mHow would you like to authenticate GitHub CLI?0m  0;36m[Use arrows to move, type to filter]0m
+0;1;36m> Login with a web browser0m
+0;39m  Paste an authentication token0m
+1A0G1A0G?25h0G2K1A0G2K1A0G2K1A0G2K0;1;92m? 0m0;1;99mHow would you like to authenticate GitHub CLI?0m0;36m Login with a web browser0m
+
+0;33m!0m First copy your one-time code: 0;1;39mCD49-45E50m
+0;1;39mPress Enter0m to open github.com in your browser...
+0;31m!0m Failed opening a web browser at https://github.com/login/device
+  exec: "xdg-open,x-www-browser,www-browser,wslview": executable file not found in $PATH
+  Please try entering the URL in your browser manually
+^C
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC37Plsofr|ogreptpractice2ce2-pg1-v19:~# ssh-keygens-ti21PCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+systemd-n 47191			 systemd-network   22u	   IPv4		    176853	0t0	   UDP eltex-01;31mKpractice2mK-pg1-v19:bootpc
+sshd	  59570				    root    4u	   IPv4		    181800	0t0	   TCP eltex-01;31mKpractice2mK-pg1-v19:ssh->172.16.8.4:48246 (ESTABLISHED)
+script	  60345				    root    6w	    REG		     252,0    32768	661699 /root/01;31mKpractice2mK_eltex-pg1-v19_part3.log
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCgh1authrsetup-git---hostnamepgithub.com7mgh auth setup-git --hostname github.com27m
+You0are not logged into the GitHub host "github.com". Run 0;1;39mgh auth login -h github.com0m to authenticate or provide `--force`
+?2004h?2004lCCCCCCCCCCCCCCCCCCCCK^C?2004lhgsetup-giti--hostname-github.comauth setup-git --hostname github.com
+?2004h0;root@eltex-practice2-pg1-v19: ~root@eltex-practice2-pg1-v19:~# 7mgh ghtauthastatus
+You0are not logged into any GitHub hosts. To log in, run: 0;1;39mgh auth login0m
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC18P8Pghrautheloginctice2ce2-pg1-v19:~# gh auth setup-git --hostname github.com
+?25l0G2K0;1;92m? 0m0;1;99mWhat account do you want to log into?0m  0;36m[Use arrows to move, type to filter]0m
+0;1;36m> GitHub.com0m
+0;39m  GitHub Enterprise Server0m
+1A0G1A0G?25h0G2K1A0G2K1A0G2K1A0G2K0;1;92m? 0m0;1;99mWhat account do you want to log into?0m0;36m GitHub.com0m
+?25l0G2K0;1;92m? 0m0;1;99mWhat is your preferred protocol for Git operations on this host?0m  0;36m[Use arrows to move, type to filter]0m
+0;1;36m> HTTPS0m
+0;39m  SSH0m
+1A0G1A0G0G2K1A0G2K1A0G2K1A0G2K1A0G2K0;1;92m? 0m0;1;99mWhat is your preferred protocol for Git operations on this host?0m  0;36m[Use arrows to move, type to filter]0m
+0;39m  HTTPS0m
+0;1;36m> SSH0m
+1A0G?25h0G2K1A0G2K1A0G2K1A0G2K1A0G2K0;1;92m? 0m0;1;99mWhat is your preferred protocol for Git operations on this host?0m0;36m SSH0m
+?25l0G2K0;1;92m? 0m0;1;99mUpload your SSH public key to your GitHub account?0m	0;36m[Use arrows to move, type to filter]0m
+0;1;36m> /root/.ssh/emogo1ka.pub0m
+0;39m  Skip0m
+1A0G1A0G?25h0G2K1A0G2K1A0G2K1A0G2K0;1;92m? 0m0;1;99mUpload your SSH public key to your GitHub account?0m0;36m /root/.ssh/emogo1ka.pub0m
+0G2K0;1;92m? 0m0;1;99mTitle for your SSH key: 0m0;39m(GitHub CLI) 0m?25l?25l999;999f6n?25h6neltex-practice2-pg1-v191D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1D1B0G1A?25h0G2K0;1;92m? 0m0;1;99mTitle for your SSH key: 0m0;36meltex-practice2-pg1-v190m
+?25l0G2K0;1;92m? 0m0;1;99mHow would you like to authenticate GitHub CLI?0m  0;36m[Use arrows to move, type to filter]0m
+0;1;36m> Login with a web browser0m
+0;39m  Paste an authentication token0m
+1A0G1A0G?25h0G2K1A0G2K1A0G2K1A0G2K0;1;92m? 0m0;1;99mHow would you like to authenticate GitHub CLI?0m0;36m Login with a web browser0m
+
+0;33m!0m First copy your one-time code: 0;1;39m824A-B79C0m
+0;1;39mPress Enter0m to open github.com in your browser... eltex-practice2-pg1-v19
+0;31m!0m Failed opening a web browser at https://github.com/login/device
+  exec: "xdg-open,x-www-browser,www-browser,wslview": executable file not found in $PATH
+  Please try entering the URL in your browser manually
+0;32m✓0m Authentication complete.
+- gh config set -h github.com git_protocol ssh
+0;32m✓0m Configured git protocol
+0;33m!0m Authentication credentials saved in plain text
+0;32m✓0m Uploaded the SSH key to your GitHub account: 0;1;39m/root/.ssh/emogo1ka.pub0m
+0;32m✓0m Logged in as 0;1;39memogo1ka0m
+?2004h0;root@eltex-practice2-pg1-v19: ~root@eltex-practice2-pg1-v19:~# gh auth setup-git --hostname github.com
+?2004h0;root@eltex-practice2-pg1-v19: ~root@eltex-practice2-pg1-v19:~# 7mgh ghtauthastatus
+0;1;39mgithub.com0m
+  0;32m✓0m Logged in to github.com account 0;1;39memogo1ka0m (/root/.config/gh/hosts.yml)
+  - Active account: 0;1;39mtrue0m
+  - Git operations protocol: 0;1;39mssh0m
+  - Token: 0;1;39mgho_************************************0m
+  - Token scopes: 0;1;39m'admin:public_key', 'gist', 'read:org', 'repo'0m
+?2004h0;root@eltex-practice2-pg1-v19: ~root@eltex-practice2-pg1-v19:~# 7mgh ghprepoecreatep--public eltex2026
+0;32m✓0m Created repository emogo1ka/eltex2026 on GitHub
+  https://github.com/emogo1ka/eltex2026
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCmkdir ~/eltex2026-&&acdi~/eltex2026:~# 7mmkdir ~/eltex2026 && cd ~/eltex202627m
+?2004h0;root@eltex-practice2-pg1-v19: ~/eltex2026root@eltex-practice2-pg1-v19:~/eltex2026# 7mechechoр"Практика 2.зРаздел 3"R>AREADME.md
+?2004h0;root@eltex-practice2-pg1-v19: ~/eltex2026root@eltex-practice2-pg1-v19:~/eltex2026# git init
+Initialized empty Git repository in /root/eltex2026/.git/
+?2004h0;root@eltex-practice2-pg1-v19: ~/eltex2026root@eltex-practice2-pg1-v19:~/eltex2026# 7mgitgitdaddAREADME.md
+?2004h0;root@eltex-practice2-pg1-v19: ~/eltex2026root@eltex-practice2-pg1-v19:~/eltex2026# 7mgitgitmcommit -mn"Initialmcommit:AREADME"
+[mainl(root-commit) e2199ee] Initial commit: README
+ 1 file changed, 1 insertion(+)
+ create mode 100644 README.md
+?2004h0;root@eltex-practice2-pg1-v19: ~/eltex2026root@eltex-practice2-pg1-v19:~/eltex2026# 7mgitgitdaddAREADME.md
+?2004h?2004l@eltex-practice2-pg1-v19: ~/eltex2026root@eltex-practice2-pg1-v19:~/eltex2026# ^C?2004l
+?2004h0;root@eltex-practice2-pg1-v19: ~/eltex2026root@eltex-practice2-pg1-v19:~/eltex2026# 7mgitgitabranch -Mimain
+0;root@eltex-practice2-pg1-v19:1~/eltex2026root@eltex-practice2-pg1-v19:~/eltex2026#xgit6remotetaddmorigindhttps://github.com/emogo1ka_github/eltex2026.gitm7mb/eltex2026.git27mA
+?2004h0;root@eltex-practice2-pg1-v19: ~/eltex2026root@eltex-practice2-pg1-v19:~/eltex2026# 7mgitgitastatus
+On0branch main
+nothing to commit, working tree clean
+?2004h0;root@eltex-practice2-pg1-v19: ~/eltex2026root@eltex-practice2-pg1-v19:~/eltex2026# 7mgitgitspush -uioriginimain
+remote: Repository not found.
+fatal: repository 'https://github.com/emogo1ka_github/eltex2026.git/' not found
+?2004h?2004l@eltex-practice2-pg1-v19: ~/eltex2026root@eltex-practice2-pg1-v19:~/eltex2026# ^C?2004l
+0;root@eltex-practice2-pg1-v19:C~/eltex2026root@eltex-practice2-pg1-v19:~/eltex2026#CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC/eltex1P2026.gitAAAAx2026.git
+
+error: remote origin already exists.
+?2004h0;root@eltex-practice2-pg1-v19: ~/eltex2026root@eltex-practice2-pg1-v19:~/eltex2026# 7mgitgitmremotemremoveiorigin
+?2004h0;root@eltex-practice2-pg1-v19: ~/eltex2026root@eltex-practice2-pg1-v19:~/eltex2026# git remote addooriginghttps://github.com/emogo1ka/eltex2026.git
+0;root@eltex-practice2-pg1-v19:1~/eltex2026root@eltex-practice2-pg1-v19:~/eltex2026#xCCCCCCCCCCCremoveaoriginKin https://github.com/emogo1ka/eltex2026.gitA
+0;root@eltex-practice2-pg1-v19:C~/eltex2026root@eltex-practice2-pg1-v19:~/eltex2026#/CCCCCCCCCCCremove6originK
+0;root@eltex-practice2-pg1-v19:C~/eltex2026root@eltex-practice2-pg1-v19:~/eltex2026#/CCCCCCCCCCCremove6originK
+0;root@eltex-practice2-pg1-v19:C~/eltex2026root@eltex-practice2-pg1-v19:~/eltex2026#/CCCC31Ppusht-u2origintmain
+KACCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+Enumerating objects: 3, done.
+Counting objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 260 bytes | 260.00 KiB/s, done.
+Total 3 (delta 0), reused 0 (delta 0), pack-reused 0
+To https://github.com/emogo1ka/eltex2026.git
+ * [new branch]	     main -> main
+branch 'main' set up to track 'origin/main'.
+?2004h0;root@eltex-practice2-pg1-v19: ~/eltex2026root@eltex-practice2-pg1-v19:~/eltex2026# 7mmkdir -p module1/task127m
+7mmkdir module1/task227m
+0;root@eltex-practice2-pg1-v19: ~/eltex2026root@eltex-practice2-pg1-v19:~/eltex2026# mkdir -p module1/task1
+mkdir module1/task2
+mkdir module1/task3
+0;root@eltex-practice2-pg1-v19:1~/eltex2026root@eltex-practice2-pg1-v19:~/eltex2026#xscp6eltex-pg1-v19@217.71.138.1:~/practice2_eltex-pg1-v19_part1.logmmodule1/task1/log module1/task1/27mA
+kex_exchange_identification: read: Connection reset by peer
+Connection reset by 217.71.138.1 port 22
+scp: Connection closed
+?2004h?2004l@eltex-practice2-pg1-v19: ~/eltex2026root@eltex-practice2-pg1-v19:~/eltex2026# ^C?2004l
+?2004h?2004l@eltex-practice2-pg1-v19: ~/eltex2026root@eltex-practice2-pg1-v19:~/eltex2026# ^C?2004l
+?2004h0;root@eltex-practice2-pg1-v19: ~/eltex2026root@eltex-practice2-pg1-v19:~/eltex2026# ?2004l
+exit
+
+Script done on 2026-03-16 09:19:28+00:00 [COMMAND_EXIT_CODE="255"]
