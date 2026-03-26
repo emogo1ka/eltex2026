@@ -40,9 +40,9 @@ int main(void) {
     int choice;
 
     for (;;) {
-        printf("\n1 — ввести права (буквенно или восьмерично), показать представления\n");
-        printf("2 — имя файла: права через stat (сравните с ls -l)\n");
-        printf("3 — chmod к текущим правам (без записи в файл)\n");
+        printf("\n1 — ввести права и показать представления\n");
+        printf("2 — права файла через stat\n");
+        printf("3 — chmod к текущим правам, без записи в файл\n");
         printf("0 — выход\n");
         printf("выбор: ");
         if (scanf("%d", &choice) != 1) {
@@ -72,7 +72,7 @@ int main(void) {
             } else {
                 unsigned m;
                 if (perm_parse_rwx_string(line, &m) != 0) {
-                    printf("не удалось разобрать строку прав\n");
+                    printf("не удалось разобрать. буквенно: 9 символов подряд без дефисов, как rwxrwxrwx\n");
                     continue;
                 }
                 current = m & 0777U;
@@ -80,7 +80,7 @@ int main(void) {
             perm_print_all(current);
         } else if (choice == 2) {
             char path[512];
-            printf("путь к файлу: ");
+            printf("путь к файлу (например perm.exe): ");
             if (!fgets(path, sizeof(path), stdin)) {
                 printf("ошибка ввода\n");
                 continue;
@@ -88,19 +88,16 @@ int main(void) {
             trim_newline(path);
             if (perm_stat_path(path, &current) != 0)
                 continue;
-            printf("результат stat (нижние 9 бит rwx):\n");
             perm_print_all(current);
-            printf("сравните с колонкой прав в выводе ls -l для этого файла.\n");
         } else if (choice == 3) {
             char spec[512];
-            printf("строка как у chmod (например u+x,g-w или 644): ");
+            printf("chmod (например u+x или 644): ");
             if (!fgets(spec, sizeof(spec), stdin)) {
                 printf("ошибка ввода\n");
                 continue;
             }
             trim_newline(spec);
             current = perm_apply_chmod(current, spec) & 0777U;
-            printf("после модификации (только расчёт, файл не менялся):\n");
             perm_print_all(current);
         } else {
             printf("нет такого пункта\n");
