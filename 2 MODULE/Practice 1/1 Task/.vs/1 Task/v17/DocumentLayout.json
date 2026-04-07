@@ -1,0 +1,75 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Anna\\source\\repos\\eltex2026\\2 MODULE\\Practice 1\\1 Task\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{BCC3D14A-7D8D-40A0-BD38-7F59C25365FA}|1 Task.vcxproj|C:\\Users\\Anna\\source\\repos\\eltex2026\\2 MODULE\\Practice 1\\1 Task\\1task.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{BCC3D14A-7D8D-40A0-BD38-7F59C25365FA}|1 Task.vcxproj|solutionrelative:1task.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BCC3D14A-7D8D-40A0-BD38-7F59C25365FA}|1 Task.vcxproj|C:\\Users\\Anna\\source\\repos\\eltex2026\\2 MODULE\\Practice 1\\1 Task\\pz1.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{BCC3D14A-7D8D-40A0-BD38-7F59C25365FA}|1 Task.vcxproj|solutionrelative:pz1.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BCC3D14A-7D8D-40A0-BD38-7F59C25365FA}|1 Task.vcxproj|C:\\Users\\Anna\\source\\repos\\eltex2026\\2 MODULE\\Practice 1\\1 Task\\1 Task.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{BCC3D14A-7D8D-40A0-BD38-7F59C25365FA}|1 Task.vcxproj|solutionrelative:1 Task.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "pz1.c",
+              "DocumentMoniker": "C:\\Users\\Anna\\source\\repos\\eltex2026\\2 MODULE\\Practice 1\\1 Task\\pz1.c",
+              "RelativeDocumentMoniker": "pz1.c",
+              "ToolTip": "C:\\Users\\Anna\\source\\repos\\eltex2026\\2 MODULE\\Practice 1\\1 Task\\pz1.c",
+              "RelativeToolTip": "pz1.c",
+              "ViewState": "AQIAAIoAAAAAAAAAAAApwJ4AAAAdAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
+              "WhenOpened": "2026-03-19T14:20:05.653Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "1task.c",
+              "DocumentMoniker": "C:\\Users\\Anna\\source\\repos\\eltex2026\\2 MODULE\\Practice 1\\1 Task\\1task.c",
+              "RelativeDocumentMoniker": "1task.c",
+              "ToolTip": "C:\\Users\\Anna\\source\\repos\\eltex2026\\2 MODULE\\Practice 1\\1 Task\\1task.c",
+              "RelativeToolTip": "1task.c",
+              "ViewState": "AQIAAL8AAAAAAAAAAAAgwOYAAAABAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
+              "WhenOpened": "2026-03-19T14:17:33.895Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "1 Task.cpp",
+              "DocumentMoniker": "C:\\Users\\Anna\\source\\repos\\eltex2026\\2 MODULE\\Practice 1\\1 Task\\1 Task.cpp",
+              "RelativeDocumentMoniker": "1 Task.cpp",
+              "ToolTip": "C:\\Users\\Anna\\source\\repos\\eltex2026\\2 MODULE\\Practice 1\\1 Task\\1 Task.cpp",
+              "RelativeToolTip": "1 Task.cpp",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2026-03-19T13:52:03.932Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

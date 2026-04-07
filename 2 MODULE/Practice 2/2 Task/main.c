@@ -9,9 +9,29 @@
 #endif
 
 static void usage(const char *argv0) {
-    fprintf(stderr, "использование: %s <шлюз> <маска> <N>\n", argv0);
+    fprintf(stderr, "использование: %s <шлюз> <маска|/префикс> <N>\n", argv0);
+    fprintf(stderr, "пример: %s 192.168.0.1 255.255.255.0 1000\n", argv0);
+    fprintf(stderr, "пример: %s 192.168.0.1 /24 1000\n", argv0);
 }
 
+static int parse_mask_arg(const char *arg, uint32_t *out_mask) {
+    if (arg[0] == '/') {
+        char *end = NULL;
+        long p = strtol(arg + 1, &end, 10);
+        if (!end || *end != '\0' || p < 0 || p > 32)
+            return -1;
+        if (p == 0) {
+            *out_mask = 0U;
+        } else {
+            *out_mask = 0xFFFFFFFFU << (32 - (unsigned)p);
+        }
+        return 0;
+    }
+    return net_parse_ipv4(arg, out_mask);
+}
+
+
+// (gw & mask) == (dest & mask)
 int main(int argc, char **argv) {
 #ifdef _WIN32
     SetConsoleOutputCP(65001);
@@ -24,7 +44,7 @@ int main(int argc, char **argv) {
     }
 
     uint32_t gw, mask;
-    if (net_parse_ipv4(argv[1], &gw) != 0 || net_parse_ipv4(argv[2], &mask) != 0) {
+    if (net_parse_ipv4(argv[1], &gw) != 0 || parse_mask_arg(argv[2], &mask) != 0) {
         fprintf(stderr, "неверный ip или маска\n");
         return 1;
     }

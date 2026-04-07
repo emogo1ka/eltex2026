@@ -1,0 +1,8 @@
+﻿  1task.c
+  pz1.c
+C:\Users\Anna\source\repos\eltex2026\2 MODULE\Practice 1\1 Task\pz1.c(143,25): warning C4013: input_contact: нет определения; предполагается "extern" с возвратом типа "int"
+C:\Users\Anna\source\repos\eltex2026\2 MODULE\Practice 1\1 Task\pz1.c(150,13): warning C4013: print_all: нет определения; предполагается "extern" с возвратом типа "int"
+C:\Users\Anna\source\repos\eltex2026\2 MODULE\Practice 1\1 Task\pz1.c(159,30): warning C4013: find_by_lastname: нет определения; предполагается "extern" с возвратом типа "int"
+C:\Users\Anna\source\repos\eltex2026\2 MODULE\Practice 1\1 Task\pz1.c(143,21): error C2440: инициализация: невозможно преобразовать "int" в "Contact"
+C:\Users\Anna\source\repos\eltex2026\2 MODULE\Practice 1\1 Task\pz1.c(159,22): warning C4047: инициализация: "Contact *" отличается по уровням косвенного обращения от "int"
+  Создание кода...

@@ -129,57 +129,36 @@ static int clause_all_octal(const char *clause) {
     return 1;
 }
 
-static void parse_rwxt(const char *p, int *hr, int *hw, int *hx) {
-    *hr = *hw = *hx = 0;
+static unsigned who_mask_from_str(const char *who) {
+    unsigned m = 0;
+    for (int i = 0; who[i]; i++) {
+        if (who[i] == 'u')
+            m |= S_IRUSR | S_IWUSR | S_IXUSR;
+        else if (who[i] == 'g')
+            m |= S_IRGRP | S_IWGRP | S_IXGRP;
+        else if (who[i] == 'o')
+            m |= S_IROTH | S_IWOTH | S_IXOTH;
+        else if (who[i] == 'a')
+            m |= S_PERM;
+    }
+    if (m == 0)
+        m = S_PERM;
+    return m & 0777U;
+}
+
+static unsigned perm_mask_from_str(const char *p) {
+    unsigned pm = 0;
     for (; *p && *p != ','; p++) {
         if (*p == ' ' || *p == '\t')
             continue;
         if (*p == 'r')
-            *hr = 1;
+            pm |= S_IRUSR | S_IRGRP | S_IROTH;
         else if (*p == 'w')
-            *hw = 1;
+            pm |= S_IWUSR | S_IWGRP | S_IWOTH;
         else if (*p == 'x')
-            *hx = 1;
+            pm |= S_IXUSR | S_IXGRP | S_IXOTH;
     }
-}
-
-static unsigned bits_for_who(char who, int hr, int hw, int hx) {
-    unsigned m = 0;
-    if (who == 'u' || who == 'a') {
-        if (hr)
-            m |= S_IRUSR;
-        if (hw)
-            m |= S_IWUSR;
-        if (hx)
-            m |= S_IXUSR;
-    }
-    if (who == 'g' || who == 'a') {
-        if (hr)
-            m |= S_IRGRP;
-        if (hw)
-            m |= S_IWGRP;
-        if (hx)
-            m |= S_IXGRP;
-    }
-    if (who == 'o' || who == 'a') {
-        if (hr)
-            m |= S_IROTH;
-        if (hw)
-            m |= S_IWOTH;
-        if (hx)
-            m |= S_IXOTH;
-    }
-    return m;
-}
-
-static unsigned mask_for_who(char who) {
-    if (who == 'u')
-        return S_IRUSR | S_IWUSR | S_IXUSR;
-    if (who == 'g')
-        return S_IRGRP | S_IWGRP | S_IXGRP;
-    if (who == 'o')
-        return S_IROTH | S_IWOTH | S_IXOTH;
-    return S_PERM;
+    return pm & 0777U;
 }
 
 static unsigned apply_one_clause(unsigned mode, const char *clause) {
@@ -203,6 +182,8 @@ static unsigned apply_one_clause(unsigned mode, const char *clause) {
         p++;
     }
     who[nw] = '\0';
+    while (*p == ' ' || *p == '\t')
+        p++;
     if (nw == 0 && (*p == '+' || *p == '-' || *p == '=')) {
         who[nw++] = 'a';
         who[nw] = '\0';
@@ -211,25 +192,21 @@ static unsigned apply_one_clause(unsigned mode, const char *clause) {
     char op = *p++;
     if (op != '+' && op != '-' && op != '=')
         return mode;
-
-    int hr, hw, hx;
-    parse_rwxt(p, &hr, &hw, &hx);
+    while (*p == ' ' || *p == '\t')
+        p++;
 
     if (who[0] == '\0')
         return mode;
 
-    for (int i = 0; who[i]; i++) {
-        char w = who[i];
-        unsigned newb = bits_for_who(w, hr, hw, hx);
-        unsigned mk = mask_for_who(w);
-        if (op == '=') {
-            mode &= ~mk;
-            mode |= (newb & mk);
-        } else if (op == '+') {
-            mode |= (newb & mk);
-        } else if (op == '-') {
-            mode &= ~(newb & mk);
-        }
+    unsigned wm = who_mask_from_str(who); // u/g/o
+    unsigned pm = perm_mask_from_str(p); //r/w/x
+    unsigned mp = pm & wm; //пересечение, какие биты менять
+    if (op == '=') {
+        mode = (mode & ~wm) | mp;
+    } else if (op == '+') {
+        mode = mode | mp;
+    } else if (op == '-') {
+        mode = mode & ~mp;
     }
     return mode;
 }

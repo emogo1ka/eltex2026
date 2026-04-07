@@ -7,6 +7,7 @@
 #include <windows.h>
 #endif
 
+// обрезка /n
 static void trim_newline(char *s) {
     size_t n = strlen(s);
     while (n > 0 && (s[n - 1] == '\n' || s[n - 1] == '\r')) {
@@ -90,14 +91,44 @@ int main(void) {
                 continue;
             perm_print_all(current);
         } else if (choice == 3) {
-            char spec[512];
-            printf("chmod (например u+x или 644): ");
-            if (!fgets(spec, sizeof(spec), stdin)) {
-                printf("ошибка ввода\n");
+            int kind = 0;
+            printf("1 — число (например 644)\n");
+            printf("2 — команда (например ug+rw или uo = wx)\n");
+            printf("выбор: ");
+            if (scanf("%d", &kind) != 1) {
+                printf("нужно число\n");
+                while (getchar() != '\n')
+                    ;
                 continue;
             }
-            trim_newline(spec);
-            current = perm_apply_chmod(current, spec) & 0777U;
+            while (getchar() != '\n')
+                ;
+
+            char spec[512];
+            if (kind == 1) {
+                printf("права (например 644): ");
+                if (!fgets(spec, sizeof(spec), stdin)) {
+                    printf("ошибка ввода\n");
+                    continue;
+                }
+                trim_newline(spec);
+                if (!input_looks_octal(spec)) {
+                    printf("ожидалось число в восьмеричном виде (например 644)\n");
+                    continue;
+                }
+                current = perm_parse_octal(spec) & 0777U;
+            } else if (kind == 2) {
+                printf("команда (например ug+rw): ");
+                if (!fgets(spec, sizeof(spec), stdin)) {
+                    printf("ошибка ввода\n");
+                    continue;
+                }
+                trim_newline(spec);
+                current = perm_apply_chmod(current, spec) & 0777U;
+            } else {
+                printf("нет такого пункта\n");
+                continue;
+            }
             perm_print_all(current);
         } else {
             printf("нет такого пункта\n");

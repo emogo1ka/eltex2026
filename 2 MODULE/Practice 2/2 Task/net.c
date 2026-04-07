@@ -12,13 +12,6 @@ int net_parse_ipv4(const char *s, uint32_t *out) {
     return 0;
 }
 
-void net_format_ipv4(uint32_t addr, char buf[16]) {
-    unsigned a = (unsigned)((addr >> 24) & 0xFFU);
-    unsigned b = (unsigned)((addr >> 16) & 0xFFU);
-    unsigned c = (unsigned)((addr >> 8) & 0xFFU);
-    unsigned d = (unsigned)(addr & 0xFFU);
-    snprintf(buf, 16, "%u.%u.%u.%u", a, b, c, d);
-}
 
 int net_same_subnet(uint32_t gw, uint32_t mask, uint32_t dest) {
     return (gw & mask) == (dest & mask);

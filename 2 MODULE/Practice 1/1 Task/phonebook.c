@@ -2,49 +2,20 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <wchar.h>
+#include <stdint.h>
 
-// читаем строку с учётом размера буфера.
-// возвращает 1, если строка закончилась переводом строки в пределах буфера,
-// и 0, если строка была обрезана (т.е. \n не попали в буфер) — остаток строки выкидываем.
-static int read_line_internal(char *buf, size_t size, const char *prompt) {
+// чтение строки и обрезание переноса строки
+void read_line(char *buf, size_t size, const char *prompt) {
     printf("%s", prompt);
     fflush(stdout);
 
     if (!fgets(buf, size, stdin)) {
         buf[0] = '\0';
-        return 1;
+        return;
     }
 
-    int has_nl = (strchr(buf, '\n') != NULL) || (strchr(buf, '\r') != NULL);
-
-    // обрезаем \r\n в конце строки
+    // отрезаем \r\n в конце строки
     buf[strcspn(buf, "\r\n")] = '\0';
-
-    // если строка не поместилась, выкидываем остаток до следующего перевода строки
-    if (!has_nl) {
-        int ch;
-        do {
-            ch = fgetc(stdin);
-        } while (ch != '\n' && ch != '\r' && ch != EOF);
-    }
-
-    return has_nl;
-}
-
-// чтение строки (без статуса усечения)
-void read_line(char *buf, size_t size, const char *prompt) {
-    (void)read_line_internal(buf, size, prompt);
-}
-
-// чтение строки с повтором при усечении
-// для необязательных полей: пустой ввод всё равно ок
-static void read_line_checked(char *buf, size_t size, const char *prompt) {
-    while (1) {
-        int ok = read_line_internal(buf, size, prompt);
-        if (ok) return;
-        puts("Слишком длинный ввод. Повторите ввод.");
-    }
 }
 
 // проверка строки на непустоту
@@ -61,16 +32,12 @@ int is_non_empty(const char *s) {
     return 0;
 }
 
-// проверка на обязательное поле ввода
+// проверка на обьязательное поле ввода
 void read_required(char *buf, size_t size, const char *prompt) {
     do {
-        int ok = read_line_internal(buf, size, prompt);
-        if (!ok) {
-            puts("Слишком длинный ввод. Повторите ввод.");
-            continue;
-        }
+        read_line(buf, size, prompt);
         if (is_non_empty(buf)) return;
-        puts("Это поле обязательно. Повторите ввод.");
+        puts("Это поле обязательно");
     } while (1);
 }
 
@@ -113,8 +80,8 @@ void add_contact(PhoneBook *pb) {
     read_required(c->last_name,  MAX_FIO, "Фамилия (обязательное): ");
     read_required(c->first_name, MAX_FIO, "Имя (обязательное): ");
     read_line(c->patronymic,     MAX_FIO, "Отчество: ");
-    read_line_checked(c->company,  MAX_LINE, "Компания: ");
-    read_line_checked(c->position, MAX_LINE, "Должность: ");
+    read_line(c->company,        MAX_LINE, "Компания: ");
+    read_line(c->position,       MAX_LINE, "Должность: ");
 
     // телефоны
     puts("\nТелефоны (до 4 шт.)");
@@ -190,79 +157,74 @@ void show_all(const PhoneBook *pb) {
         print_contact(&pb->contacts[i]);
 }
 
-// поиск по имени или фамилии (без учета регистра)
+// поиск по имени или фамилии без учета регистра (UTF-8, ру/англ)
+static uint32_t utf8_decode(const char *s, int *bytes) {
+    unsigned char c0 = (unsigned char)s[0];
+    if (c0 < 0x80) {
+        *bytes = 1;
+        return c0;
+    }
+    if ((c0 & 0xE0) == 0xC0) {
+        *bytes = 2;
+        return ((uint32_t)(c0 & 0x1F) << 6) | ((uint32_t)(s[1] & 0x3F));
+    }
+    if ((c0 & 0xF0) == 0xE0) {
+        *bytes = 3;
+        return ((uint32_t)(c0 & 0x0F) << 12) | ((uint32_t)(s[1] & 0x3F) << 6) | ((uint32_t)(s[2] & 0x3F));
+    }
+    // невалидно/редко — считаем, что 1 байт
+    *bytes = 1;
+    return c0;
+}
+
+static int utf8_encode(uint32_t cp, char *out) {
+    if (cp < 0x80) {
+        out[0] = (char)cp;
+        return 1;
+    }
+    if (cp < 0x800) {
+        out[0] = (char)(0xC0 | ((cp >> 6) & 0x1F));
+        out[1] = (char)(0x80 | (cp & 0x3F));
+        return 2;
+    }
+}
+
+static uint32_t to_lower_cp(uint32_t cp) {
+    // ascii
+    if (cp >= 'A' && cp <= 'Z') return cp - 'A' + 'a';
+
+    // перевод в нижний регистр по стандартам utf8
+    if (cp == 0x0401) return 0x0451;            // Ё -> ё
+    if (cp >= 0x0410 && cp <= 0x042F) return cp + 0x20; // А..Я -> а..я
+    return cp;
+}
+
+static void to_lower_utf8(char *dst, size_t dst_sz, const char *src) {
+    size_t out_i = 0;
+    while (*src && out_i + 4 < dst_sz) {
+        int nbytes = 1;
+        uint32_t cp = utf8_decode(src, &nbytes);
+        cp = to_lower_cp(cp);
+
+        char tmp[4];
+        int w = utf8_encode(cp, tmp);
+
+        if (out_i + (size_t)w >= dst_sz) break;
+        for (int k = 0; k < w; k++) dst[out_i++] = tmp[k];
+        src += nbytes;
+    }
+    dst[out_i] = '\0';
+}
+
 static int contains(const char *haystack, const char *needle) {
     if (!haystack || !needle) return 0;
     if (!*needle) return 1;
 
-#ifdef _WIN32
-    UINT cp = CP_UTF8;
-    int wh = MultiByteToWideChar(cp, MB_ERR_INVALID_CHARS, haystack, -1, NULL, 0);
-    int wn = MultiByteToWideChar(cp, MB_ERR_INVALID_CHARS, needle, -1, NULL, 0);
-    if (wh <= 0 || wn <= 0) {
-        cp = CP_ACP;
-        wh = MultiByteToWideChar(cp, 0, haystack, -1, NULL, 0);
-        wn = MultiByteToWideChar(cp, 0, needle, -1, NULL, 0);
-        if (wh <= 0 || wn <= 0) return 0;
-    }
-
-    wchar_t *wH = (wchar_t *)malloc(sizeof(wchar_t) * (size_t)wh);
-    wchar_t *wN = (wchar_t *)malloc(sizeof(wchar_t) * (size_t)wn);
-    if (!wH || !wN) {
-        free(wH);
-        free(wN);
-        return 0;
-    }
-
-    MultiByteToWideChar(cp, 0, haystack, -1, wH, wh);
-    MultiByteToWideChar(cp, 0, needle, -1, wN, wn);
-
-    int lowH = LCMapStringW(LOCALE_INVARIANT, LCMAP_LOWERCASE, wH, -1, NULL, 0);
-    int lowN = LCMapStringW(LOCALE_INVARIANT, LCMAP_LOWERCASE, wN, -1, NULL, 0);
-    if (lowH <= 0 || lowN <= 0) {
-        free(wH);
-        free(wN);
-        return 0;
-    }
-
-    wchar_t *lH = (wchar_t *)malloc(sizeof(wchar_t) * (size_t)lowH);
-    wchar_t *lN = (wchar_t *)malloc(sizeof(wchar_t) * (size_t)lowN);
-    if (!lH || !lN) {
-        free(wH);
-        free(wN);
-        free(lH);
-        free(lN);
-        return 0;
-    }
-
-    LCMapStringW(LOCALE_INVARIANT, LCMAP_LOWERCASE, wH, -1, lH, lowH);
-    LCMapStringW(LOCALE_INVARIANT, LCMAP_LOWERCASE, wN, -1, lN, lowN);
-
-    int res = (wcsstr(lH, lN) != NULL);
-
-    free(wH);
-    free(wN);
-    free(lH);
-    free(lN);
-    return res;
-#else
-    // fallback для ascii
-    char hbuf[256];
-    char nbuf[256];
-    strncpy(hbuf, haystack, sizeof(hbuf) - 1);
-    hbuf[sizeof(hbuf) - 1] = '\0';
-    strncpy(nbuf, needle, sizeof(nbuf) - 1);
-    nbuf[sizeof(nbuf) - 1] = '\0';
-    for (char *p = hbuf; *p; ++p) {
-        unsigned char ch = (unsigned char)*p;
-        if (ch >= 'A' && ch <= 'Z') *p = (char)(ch - 'A' + 'a');
-    }
-    for (char *p = nbuf; *p; ++p) {
-        unsigned char ch = (unsigned char)*p;
-        if (ch >= 'A' && ch <= 'Z') *p = (char)(ch - 'A' + 'a');
-    }
+    char hbuf[512];
+    char nbuf[512];
+    to_lower_utf8(hbuf, sizeof hbuf, haystack);
+    to_lower_utf8(nbuf, sizeof nbuf, needle);
     return strstr(hbuf, nbuf) != NULL;
-#endif
 }
 
 int find_contacts(const PhoneBook *pb, const char *query, int *results, int max_results) {
@@ -342,15 +304,11 @@ void edit_contact(PhoneBook *pb) {
     read_line(buf, sizeof buf, #fld ": "); \
     if (is_non_empty(buf)) strncpy(c->fld, buf, sizeof(c->fld)-1)
 
-#define UPDATE_FIELD_CHECKED(fld) \
-    read_line_checked(buf, sizeof buf, #fld ": "); \
-    if (is_non_empty(buf)) strncpy(c->fld, buf, sizeof(c->fld)-1)
-
     UPDATE_FIELD(last_name);
     UPDATE_FIELD(first_name);
     UPDATE_FIELD(patronymic);
-    UPDATE_FIELD_CHECKED(company);
-    UPDATE_FIELD_CHECKED(position);
+    UPDATE_FIELD(company);
+    UPDATE_FIELD(position);
 
     puts("\nНовые номера телефонов (Enter = закончить):");
     c->phone_count = 0;
