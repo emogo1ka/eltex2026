@@ -57,25 +57,25 @@ static int parse_segment(char *seg, ParsedCmd *out) {
 
     char *tok = strtok(seg, " \t\r\n");
     while (tok) {
-        if (strcmp(tok, "<") == 0) {
-            tok = strtok(NULL, " \t\r\n");
+        if (strcmp(tok, "<") == 0) { // 
+            tok = strtok(NULL, " \t\r\n"); // следующий токен после < - имя файла для stdin
             if (!tok)
                 return -1;
             out->infile = tok;
-        } else if (strcmp(tok, ">") == 0) {
+        } else if (strcmp(tok, ">") == 0) { // следующий токен после > - имя файла для stdout
             tok = strtok(NULL, " \t\r\n");
             if (!tok)
                 return -1;
             out->outfile = tok;
-        } else {
+        } else { // обычный аргумент команды
             if (out->argc >= MAX_ARGS - 1)
                 return -1;
             out->argv[out->argc++] = tok;
         }
-        tok = strtok(NULL, " \t\r\n");
+        tok = strtok(NULL, " \t\r\n"); // следующий токен для обработки
     }
     out->argv[out->argc] = NULL;
-    return out->argc > 0 ? 0 : -1;
+    return out->argc > 0 ? 0 : -1; // если не было найдено аргументов команды, возвращаем ошибку
 }
 
 static int try_exec(char **argv) {
@@ -145,8 +145,8 @@ static void run_pipeline(ParsedCmd *cmds, int ncmds) {
             }
             // закрываем все пайпы в дочернем процессе
             for (int j = 0; j < npipes; j++) {
-                close(fds[j][0]);
-                close(fds[j][1]);
+                close(fds[j][0]); // закрывает конец для чтения
+                close(fds[j][1]); // закрывает конец для записи
             }
             //  попытка выполнения команды
             const char *prog = cmds[i].argv[0];
