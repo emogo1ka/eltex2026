@@ -8,8 +8,8 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
-#define MAX_CMDS 24
-#define MAX_ARGS 48
+#define MAX_CMDS 24 // максимальное количество команд в конвейере
+#define MAX_ARGS 48 // максимальное количество аргументов в команде
 
 typedef struct {
     char *argv[MAX_ARGS];
@@ -80,15 +80,12 @@ static int parse_segment(char *seg, ParsedCmd *out) {
 
 static int try_exec(char **argv) {
     execvp(argv[0], argv);
-    if (errno == ENOENT) {
         static char path[512];
         const char *orig = argv[0];
         if (snprintf(path, sizeof path, "./%s", orig) < (int)sizeof path) {
             argv[0] = path;
             execvp(argv[0], argv);
         }
-    }
-    return -1;
 }
 
 static void run_pipeline(ParsedCmd *cmds, int ncmds) {

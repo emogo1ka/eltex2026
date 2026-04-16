@@ -46,10 +46,8 @@ typedef struct {
 void init_phonebook(PhoneBook *pb);
 void free_phonebook(PhoneBook *pb);
 
-/** Небуферизованная загрузка: читает записи Contact целиком до EOF. Файл может отсутствовать. */
 void pb_load(PhoneBook *pb, const char *path);
 
-/** Небуферизованная запись всех контактов в файл (перезапись). */
 void pb_save(const PhoneBook *pb, const char *path);
 
 void add_contact(PhoneBook *pb);

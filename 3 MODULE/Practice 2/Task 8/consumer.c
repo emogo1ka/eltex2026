@@ -1,3 +1,5 @@
+#define _POSIX_C_SOURCE 200809L
+
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -84,20 +86,20 @@ int main(int argc, char **argv) {
 
         char lines[256][256];
         int line_count = 0;
-        while (line_count < 256 && fgets(lines[line_count], sizeof(lines[line_count]), f) != NULL) {
+        while (line_count < 256 && fgets(lines[line_count], sizeof(lines[line_count]), f) != NULL) { // читаем строки из файла в массив lines
             line_count++;
         }
         fclose(f);
 
-        int target_idx = -1;
+        int target_idx = -1; // ищем первую строку, которая не помечена как DONE и не пустая
         for (int i = 0; i < line_count; ++i) {
-            if (strncmp(lines[i], "DONE|", 5) != 0 && lines[i][0] != '\n') {
+            if (strncmp(lines[i], "DONE|", 5) != 0 && lines[i][0] != '\n') { // строка не помечена как DONE и не пустая
                 target_idx = i;
                 break;
             }
         }
 
-        if (target_idx != -1) {
+        if (target_idx != -1) { // если нашли строку для обработки
             int min_v = 0;
             int max_v = 0;
             if (parse_min_max(lines[target_idx], &min_v, &max_v) == 0) {
@@ -105,14 +107,14 @@ int main(int argc, char **argv) {
             }
 
             char marked[256];
-            snprintf(marked, sizeof(marked), "DONE|%s", lines[target_idx]);
-            strncpy(lines[target_idx], marked, sizeof(lines[target_idx]) - 1);
-            lines[target_idx][sizeof(lines[target_idx]) - 1] = '\0';
+            snprintf(marked, sizeof(marked), "DONE|%.250s", lines[target_idx]); // дописываем DONE| в начало строки
+            strncpy(lines[target_idx], marked, sizeof(lines[target_idx]) - 1); // заменяем строку на помеченную как DONE
+            lines[target_idx][sizeof(lines[target_idx]) - 1] = '\0'; //помещаем финальным символом конец чтения строки
 
             f = fopen(file_name, "w");
             if (f != NULL) {
                 for (int i = 0; i < line_count; ++i) {
-                    fputs(lines[i], f);
+                    fputs(lines[i], f); // записываем все строки обратно в файл
                 }
                 fclose(f);
             }
@@ -123,7 +125,7 @@ int main(int argc, char **argv) {
             break;
         }
 
-        usleep(200000);
+        usleep(200000); // ждем 200 мс перед следующей итерацией
     }
 
     return 0;

@@ -1,3 +1,4 @@
+#define _POSIX_C_SOURCE 200809L
 #define _GNU_SOURCE
 #include <fcntl.h>
 #include <semaphore.h>
@@ -90,7 +91,7 @@ int main(void) {
                 }
 
                 char marked[256];
-                snprintf(marked, sizeof(marked), "DONE|%s", lines[idx]);
+                snprintf(marked, sizeof(marked), "DONE|%.250s", lines[idx]);
                 strncpy(lines[idx], marked, sizeof(lines[idx]) - 1);
                 lines[idx][sizeof(lines[idx]) - 1] = '\0';
 
