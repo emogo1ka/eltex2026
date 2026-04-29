@@ -16,11 +16,15 @@ static int parse_min_max(const char *line, int *min_val, int *max_val) {
     strncpy(copy, line, sizeof(copy) - 1);
     copy[sizeof(copy) - 1] = '\0';
 
-    char *save = NULL;
-    char *token = strtok_r(copy, " \t\r\n", &save);
-    if (token == NULL) {
-        return -1;
+    // Если строка начинается с DONE|, пропускаем эту часть для парсинга чисел
+    char *start = copy;
+    if (strncmp(start, "CHECKED|", 8) == 0) {
+        start += 8;
     }
+
+    char *save = NULL;
+    char *token = strtok_r(start, " \t\r\n", &save);
+    if (token == NULL) return -1;
 
     int value = atoi(token);
     *min_val = value;
@@ -28,20 +32,18 @@ static int parse_min_max(const char *line, int *min_val, int *max_val) {
 
     while ((token = strtok_r(NULL, " \t\r\n", &save)) != NULL) {
         value = atoi(token);
-        if (value < *min_val) {
-            *min_val = value;
-        }
-        if (value > *max_val) {
-            *max_val = value;
-        }
+        if (value < *min_val) *min_val = value;
+        if (value > *max_val) *max_val = value;
     }
     return 0;
 }
 
 int main(void) {
-    const char *file_name = "task9_data.txt";
-    const char *sem_name = "/task9_file_sem";
+    const char *file_name = "data.txt";
+    const char *sem_name = "/task9_sem"; // Имя должно начинаться со слэша
 
+    // Удаляем старый семафор на всякий случай
+    sem_unlink(sem_name);
     sem_t *sem = sem_open(sem_name, O_CREAT, 0666, 1);
     if (sem == SEM_FAILED) {
         perror("sem_open");
@@ -56,14 +58,13 @@ int main(void) {
         return 1;
     }
 
-    if (pid == 0) {
+    if (pid == 0) { // Child
         while (1) {
             sem_wait(sem);
-
             FILE *f = fopen(file_name, "r");
             if (f == NULL) {
                 sem_post(sem);
-                usleep(200000);
+                usleep(100000);
                 continue;
             }
 
@@ -76,22 +77,22 @@ int main(void) {
 
             int idx = -1;
             for (int i = 0; i < line_count; ++i) {
-                if (strncmp(lines[i], "DONE|", 5) != 0 && lines[i][0] != '\n') {
+                // Ищем строку, в которой нет метки и которая не пуста
+                if (strstr(lines[i], "CHECKED|") == NULL && strlen(lines[i]) > 1) {
                     idx = i;
                     break;
                 }
             }
 
             if (idx != -1) {
-                int min_v = 0;
-                int max_v = 0;
+                int min_v, max_v;
                 if (parse_min_max(lines[idx], &min_v, &max_v) == 0) {
-                    printf("Child: min=%d max=%d\n", min_v, max_v);
+                    printf("Child: Processed line %d: min=%d max=%d\n", idx + 1, min_v, max_v);
                     fflush(stdout);
                 }
 
-                char marked[256];
-                snprintf(marked, sizeof(marked), "DONE|%.250s", lines[idx]);
+                char marked[512];
+                snprintf(marked, sizeof(marked), "CHECKED|%s", lines[idx]);
                 strncpy(lines[idx], marked, sizeof(lines[idx]) - 1);
                 lines[idx][sizeof(lines[idx]) - 1] = '\0';
 
@@ -103,12 +104,12 @@ int main(void) {
                     fclose(f);
                 }
             }
-
             sem_post(sem);
-            usleep(200000);
+            usleep(100000);
         }
     }
 
+    // Parent
     srand((unsigned int)(time(NULL) ^ getpid()));
     for (int round = 0; round < 10; ++round) {
         int count = 1 + rand() % 8;
@@ -124,14 +125,17 @@ int main(void) {
         if (f != NULL) {
             fputs(line, f);
             fclose(f);
+            printf("Parent: Added new line (round %d)\n", round + 1);
         }
         sem_post(sem);
         sleep(1);
     }
 
+    sleep(2); // Даем ребенку время доработать
     kill(pid, SIGTERM);
     waitpid(pid, NULL, 0);
     sem_close(sem);
     sem_unlink(sem_name);
+    printf("Parent: Done.\n");
     return 0;
 }

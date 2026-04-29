@@ -5,7 +5,7 @@ LDFLAGS=-pthread
 all: task9
 
 task9: main.c
-	$(CC) $(CFLAGS) -o task9 main.c $(LDFLAGS)
+	$(CC) $(CFLAGS) -o semposix main.c $(LDFLAGS)
 
 clean:
-	rm -f task9 task9_data.txt
+	rm -f semposix semposix_data.txt

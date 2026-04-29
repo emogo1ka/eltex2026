@@ -1,5 +1,5 @@
+#define _DEFAULT_SOURCE
 #define _POSIX_C_SOURCE 200809L
-
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -26,15 +26,16 @@ static int sem_unlock(int semid) {
 }
 
 static int parse_min_max(const char *line, int *min_val, int *max_val) {
-    char copy[256];
+    char copy[512];
     strncpy(copy, line, sizeof(copy) - 1);
     copy[sizeof(copy) - 1] = '\0';
 
+    char *start = copy;
+    if (strncmp(start, "CHECKED|", 8) == 0) start += 8;
+
     char *save = NULL;
-    char *token = strtok_r(copy, " \t\r\n", &save);
-    if (token == NULL) {
-        return -1;
-    }
+    char *token = strtok_r(start, " \t\r\n", &save);
+    if (token == NULL) return -1;
 
     int value = atoi(token);
     *min_val = value;
@@ -42,19 +43,15 @@ static int parse_min_max(const char *line, int *min_val, int *max_val) {
 
     while ((token = strtok_r(NULL, " \t\r\n", &save)) != NULL) {
         value = atoi(token);
-        if (value < *min_val) {
-            *min_val = value;
-        }
-        if (value > *max_val) {
-            *max_val = value;
-        }
+        if (value < *min_val) *min_val = value;
+        if (value > *max_val) *max_val = value;
     }
     return 0;
 }
 
 int main(int argc, char **argv) {
     if (argc != 2) {
-        fprintf(stderr, "Usage: %s <file>\n", argv[0]);
+        fprintf(stderr, "Usage: %s <file_name>\n", argv[0]);
         return 1;
     }
 
@@ -65,67 +62,59 @@ int main(int argc, char **argv) {
         return 1;
     }
 
-    int semid = semget(key, 1, IPC_CREAT | 0666);
+    int semid = semget(key, 1, 0666);
     if (semid == -1) {
-        perror("semget");
+        perror("semget (run producer first)");
         return 1;
     }
 
+    printf("Consumer started for file: %s (PID: %d)\n", file_name, getpid());
+
     while (1) {
-        if (sem_lock(semid) == -1) {
-            perror("sem_lock");
-            break;
-        }
+        if (sem_lock(semid) == -1) break;
 
         FILE *f = fopen(file_name, "r");
         if (f == NULL) {
-            perror("fopen read");
             sem_unlock(semid);
-            break;
+            usleep(500000);
+            continue;
         }
 
-        char lines[256][256];
+        char lines[512][512];
         int line_count = 0;
-        while (line_count < 256 && fgets(lines[line_count], sizeof(lines[line_count]), f) != NULL) { // читаем строки из файла в массив lines
+        while (line_count < 512 && fgets(lines[line_count], sizeof(lines[line_count]), f) != NULL) {
             line_count++;
         }
         fclose(f);
 
-        int target_idx = -1; // ищем первую строку, которая не помечена как DONE и не пустая
+        int target_idx = -1;
         for (int i = 0; i < line_count; ++i) {
-            if (strncmp(lines[i], "DONE|", 5) != 0 && lines[i][0] != '\n') { // строка не помечена как DONE и не пустая
+            if (strstr(lines[i], "CHECKED|") == NULL && strlen(lines[i]) > 1) {
                 target_idx = i;
                 break;
             }
         }
 
-        if (target_idx != -1) { // если нашли строку для обработки
-            int min_v = 0;
-            int max_v = 0;
+        if (target_idx != -1) {
+            int min_v, max_v;
             if (parse_min_max(lines[target_idx], &min_v, &max_v) == 0) {
-                printf("PID %d: min=%d max=%d\n", getpid(), min_v, max_v);
+                printf("Consumer [%d]: min=%d max=%d\n", getpid(), min_v, max_v);
             }
 
-            char marked[256];
-            snprintf(marked, sizeof(marked), "DONE|%.250s", lines[target_idx]); // дописываем DONE| в начало строки
-            strncpy(lines[target_idx], marked, sizeof(lines[target_idx]) - 1); // заменяем строку на помеченную как DONE
-            lines[target_idx][sizeof(lines[target_idx]) - 1] = '\0'; //помещаем финальным символом конец чтения строки
+            char marked[1024];
+            snprintf(marked, sizeof(marked), "CHECKED|%s", lines[target_idx]);
+            strncpy(lines[target_idx], marked, sizeof(lines[target_idx]) - 1);
+            lines[target_idx][sizeof(lines[target_idx]) - 1] = '\0';
 
             f = fopen(file_name, "w");
             if (f != NULL) {
-                for (int i = 0; i < line_count; ++i) {
-                    fputs(lines[i], f); // записываем все строки обратно в файл
-                }
+                for (int i = 0; i < line_count; ++i) fputs(lines[i], f);
                 fclose(f);
             }
         }
 
-        if (sem_unlock(semid) == -1) {
-            perror("sem_unlock");
-            break;
-        }
-
-        usleep(200000); // ждем 200 мс перед следующей итерацией
+        sem_unlock(semid);
+        usleep(200000);
     }
 
     return 0;
