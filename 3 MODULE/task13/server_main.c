@@ -15,7 +15,7 @@ void error(const char *msg) {
     exit(1);
 }
 
-void handle_file_transfer(int sock) {
+void handle_file_transfer(int sock) { // функция для обработки запроса на передачу файла от клиента
     char filename[256];
     char buffer[BUFFER_SIZE];
     
@@ -29,20 +29,20 @@ void handle_file_transfer(int sock) {
         return;
     }
 
-    fseek(fp, 0, SEEK_END);
+    fseek(fp, 0, SEEK_END); // определяем размер файла
     long fsize = ftell(fp);
-    rewind(fp);
-    write(sock, &fsize, sizeof(fsize));
+    rewind(fp); // возвращаемся в начало файла
+    write(sock, &fsize, sizeof(fsize)); // отправляем размер файла клиенту
 
     int n;
     while ((n = fread(buffer, 1, BUFFER_SIZE, fp)) > 0) {
-        write(sock, buffer, n);
+        write(sock, buffer, n); // отправляем файл клиенту по частям, пока не отправим весь
     }
-    fclose(fp);
+    fclose(fp); // закрываем файл после отправки
     printf("[Server] File %s sent successfully\n", filename);
 }
 
-void dostuff(int sock) {
+void dostuff(int sock) { // обработка запросов от клиента
     char buff[BUFFER_SIZE];
     int cmd_code;
 
@@ -59,7 +59,7 @@ void dostuff(int sock) {
             char val_a[64], val_b[64];
             double a, b, res;
             
-            read(sock, &op, 1);
+            read(sock, &op, 1); // читаем оператор
             read(sock, val_a, sizeof(val_a)); a = atof(val_a);
             read(sock, val_b, sizeof(val_b)); b = atof(val_b);
 
@@ -109,7 +109,7 @@ int main(int argc, char *argv[]) {
     signal(SIGCHLD, SIG_IGN);
 
     while (1) {
-        newsockfd = accept(sockfd, (struct sockaddr *)&cli_addr, &clilen);
+        newsockfd = accept(sockfd, (struct sockaddr *)&cli_addr, &clilen); // ждем подключения клиента
         if (newsockfd < 0) error("ERROR on accept");
         
         printf("[Server] + New connection from %s\n", inet_ntoa(cli_addr.sin_addr));

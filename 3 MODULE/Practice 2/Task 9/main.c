@@ -16,7 +16,7 @@ static int parse_min_max(const char *line, int *min_val, int *max_val) {
     strncpy(copy, line, sizeof(copy) - 1);
     copy[sizeof(copy) - 1] = '\0';
 
-    // Если строка начинается с DONE|, пропускаем эту часть для парсинга чисел
+    // Если строка начинается с CHECKED|, пропускаем эту часть для парсинга чисел
     char *start = copy;
     if (strncmp(start, "CHECKED|", 8) == 0) {
         start += 8;
@@ -50,7 +50,7 @@ int main(void) {
         return 1;
     }
 
-    pid_t pid = fork();
+    pid_t pid = fork(); // создаем дочерний процесс
     if (pid == -1) {
         perror("fork");
         sem_close(sem);
@@ -58,7 +58,7 @@ int main(void) {
         return 1;
     }
 
-    if (pid == 0) { // Child
+    if (pid == 0) { // ребенок
         while (1) {
             sem_wait(sem);
             FILE *f = fopen(file_name, "r");

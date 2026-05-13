@@ -57,12 +57,12 @@ void run_epoll_server(int port) {
     set_nonblocking(listen_fd);
 
     struct sockaddr_in addr;
-    memset(&addr, 0, sizeof(addr));
-    addr.sin_family = AF_INET;
-    addr.sin_addr.s_addr = INADDR_ANY;
-    addr.sin_port = htons(port);
+    memset(&addr, 0, sizeof(addr)); 
+    addr.sin_family = AF_INET; // указываем семейство адресов
+    addr.sin_addr.s_addr = INADDR_ANY; // слушаем на всех интерфейсах
+    addr.sin_port = htons(port); // указываем порт для прослушивания
 
-    if (bind(listen_fd, (struct sockaddr *)&addr, sizeof(addr)) < 0) {
+    if (bind(listen_fd, (struct sockaddr *)&addr, sizeof(addr)) < 0) { // привязываем сокет к адресу и порту
         perror("bind");
         return;
     }
@@ -72,24 +72,25 @@ void run_epoll_server(int port) {
         return;
     }
 
-    int epoll_fd = epoll_create1(0);
+    int epoll_fd = epoll_create1(0); // создаем epoll объект событий
     if (epoll_fd < 0) { perror("epoll_create"); return; }
 
-    struct epoll_event ev, events[MAX_EVENTS];
-    ev.events = EPOLLIN;
+    struct epoll_event ev, events[MAX_EVENTS]; // структура для добавления сокетов в epoll и массив для получения событий
+    ev.events = EPOLLIN; // интересуемся событиями чтения
     ev.data.ptr = NULL; // указываем NULL для слушающего сокета
-    epoll_ctl(epoll_fd, EPOLL_CTL_ADD, listen_fd, &ev);
+    //ID самого объекта epol, команда, что именно нужно сделать, номер конкретного сокета, какие события ловить
+    epoll_ctl(epoll_fd, EPOLL_CTL_ADD, listen_fd, &ev); // добавляем слушающий сокет в epoll
 
     printf("Epoll Server listening on port %d...\n", port);
 
     while (1) {
-        int nfds = epoll_wait(epoll_fd, events, MAX_EVENTS, -1);
-        for (int i = 0; i < nfds; i++) {
+        int nfds = epoll_wait(epoll_fd, events, MAX_EVENTS, -1); // ждем событий на сокетах
+        for (int i = 0; i < nfds; i++) { // обрабатываем каждое событие
             if (events[i].data.ptr == NULL) { // новый клиент подключился к слушающему сокету
                 while (1) {
                     struct sockaddr_in client_addr;
                     socklen_t client_len = sizeof(client_addr);
-                    int conn_fd = accept(listen_fd, (struct sockaddr *)&client_addr, &client_len);
+                    int conn_fd = accept(listen_fd, (struct sockaddr *)&client_addr, &client_len); // принимаем новое соединение
                     if (conn_fd < 0) {
                         if (errno != EAGAIN && errno != EWOULDBLOCK) perror("accept");
                         break;
